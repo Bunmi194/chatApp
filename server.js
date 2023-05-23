@@ -17,25 +17,25 @@ const io = socketIO(server, {
   transports: ['websocket', 'polling']
 });
 
-let users = [];
-app.use(cors());
-app.use(morgan('tiny'));
-app.use(express.urlencoded());
-app.use(express.json());
-connectDB();
-app.use("/v1/users", usersRoute);
-app.use("/v1/chats", chatsRoute);
-const addUser = (userId, socketId) => {
-  !users.some((user)=> user.userId === userId) && users.push({userId, socketId});
-  console.log("users joined: ", JSON.stringify(users))
-}
-
-const removeUser = (socketId) => {
-  users = users.filter((user)=> user.socketId !== socketId);
-  console.log("users left: ", JSON.stringify(users))
-}
-
 try {
+  
+  let users = [];
+  app.use(cors());
+  app.use(morgan('tiny'));
+  app.use(express.urlencoded());
+  app.use(express.json());
+  connectDB();
+  app.use("/v1/users", usersRoute);
+  app.use("/v1/chats", chatsRoute);
+  const addUser = (userId, socketId) => {
+    !users.some((user)=> user.userId === userId) && users.push({userId, socketId});
+    console.log("users joined: ", JSON.stringify(users))
+  }
+  
+  const removeUser = (socketId) => {
+    users = users.filter((user)=> user.socketId !== socketId);
+    console.log("users left: ", JSON.stringify(users))
+  }
   
   io.on('connection', (socket) => {
     console.log('A user connected');
@@ -54,7 +54,7 @@ try {
       if(receiverId){
         const recipientId = users.find(user => user.userId === receiverId);
         console.log('recipientId: ', recipientId);
-        if(recipientId.socketId){
+        if(recipientId){
           //user is already connected--online
           io.to(recipientId.socketId).emit('privateMessage', data);
         }
@@ -85,11 +85,11 @@ try {
       io.emit('userList', users);
     });
     });
+    server.listen(4000, () => {
+      console.log('Server listening on port 4000');
+    });
 } catch (error) {
   console.log(error);
 }
 
 
-server.listen(4000, () => {
-  console.log('Server listening on port 4000');
-});
