@@ -5,7 +5,10 @@ const cors = require('cors');
 const morgan = require('morgan');
 const usersRoute = require("./routes/users");
 const chatsRoute = require("./routes/chats");
+const googleRoute = require("./routes/google");
 const connectDB = require("./config/database");
+const session = require("express-session");
+const passport = require("passport");
 require("dotenv").config();
 const app = express();
 const server = http.createServer(app);
@@ -17,16 +20,31 @@ const io = socketIO(server, {
   transports: ['websocket', 'polling']
 });
 
+app.use(session({
+  secret: 'Emove',
+  resave: false,
+  saveUninitialized: false
+}));
+
+let users = [];
+
+app.use(cors({
+  origin: '*',
+}))
+app.use(morgan('tiny'));
+app.use(express.urlencoded());
+app.use(express.json());
+connectDB();
+
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.use("/v1/users", usersRoute);
+app.use("/v1/chats", chatsRoute);
+app.use("/v1/strategy", googleRoute);
+
 try {
-  
-  let users = [];
-  app.use(cors());
-  app.use(morgan('tiny'));
-  app.use(express.urlencoded());
-  app.use(express.json());
-  connectDB();
-  app.use("/v1/users", usersRoute);
-  app.use("/v1/chats", chatsRoute);
   const addUser = (userId, socketId) => {
     !users.some((user)=> user.userId === userId) && users.push({userId, socketId});
     console.log("users joined: ", JSON.stringify(users))

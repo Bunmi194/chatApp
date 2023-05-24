@@ -187,6 +187,8 @@ route.get("/verify/:token", async (req, res) => {
 route.post("/search", async (req, res) => {
   try {
     const { email, id } = req.body;
+    const token = req.headers.authorization.split(" ")[1];
+    console.log(`token: ${token}`);
     if (!email && !id) {
       return res.status(400).json({
         message: "Invalid email or id",
@@ -199,7 +201,9 @@ route.post("/search", async (req, res) => {
           message: "Invalid email",
         });
       }
-      user = await fetchUserFromDatabase(email);
+      const verifyToken = jwt.verify(token, jwtSecret);
+      console.log("verifyToken: ", verifyToken);
+      user = await fetchUserFromDatabase(email, verifyToken.userId);
     }
     if(id){
       if(typeof id !== "string"){

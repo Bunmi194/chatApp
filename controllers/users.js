@@ -13,12 +13,13 @@ const saveUserToDatabase = async (user) => {
     });
 };
 
-const fetchUserFromDatabase = async (userEmailOrId) => {
+const fetchUserFromDatabase = async (userEmailOrId, currentUserId) => {
   console.log("userEmailOrId: ", userEmailOrId);
   console.log("userEmailOrId.includes('@'): ", userEmailOrId.includes("@"));
+  
   if (userEmailOrId.includes("@")) {
-    //fetch by email
-    return User.find({ email: userEmailOrId })
+    // fetch by email excluding the current user
+    return User.find({ email: userEmailOrId, _id: { $ne: currentUserId } })
       .then((user) => {
         return user;
       })
@@ -27,8 +28,9 @@ const fetchUserFromDatabase = async (userEmailOrId) => {
         return null;
       });
   }
-  //fetch by id
-  return User.find({ _id: userEmailOrId })
+  
+  // fetch by id excluding the current user
+  return User.find({ _id: userEmailOrId, _id: { $ne: currentUserId } })
     .then((user) => {
       return user;
     })
