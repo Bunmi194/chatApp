@@ -19,11 +19,11 @@ console.log("appName: ", appName);
 const route = express.Router();
 
 route.post("/register", async (req, res) => {
-  //validate input
-  const error = registerUserZod.safeParse(req.body);
-  //check if the user is already registered
-  const { email, password, confirmPassword, firstName, lastName } = req.body;
   try {
+    //validate input
+    const error = registerUserZod.safeParse(req.body);
+    //check if the user is already registered
+    const { email, password, confirmPassword, firstName, lastName } = req.body;
     if (error.success === false) {
       return res.status(400).send({
         success: false,
@@ -88,11 +88,11 @@ route.post("/register", async (req, res) => {
 });
 
 route.post("/login", async (req, res) => {
-  //validate input
-  const error = loginUserZod.safeParse(req.body);
-  //check if the user exists
-  const { email, password } = req.body;
   try {
+    //validate input
+    const error = loginUserZod.safeParse(req.body);
+    //check if the user exists
+    const { email, password } = req.body;
     if (error.success === false) {
       return res.status(400).send({
         success: false,
@@ -147,9 +147,10 @@ route.post("/login", async (req, res) => {
 });
 
 route.get("/verify/:token", async (req, res) => {
-  //validate
-  const token = req.params.token;
+  
   try {
+    //validate
+    const token = req.params.token;
     const userEmail = jwt.verify(token, jwtSecret);
     const userExists = await fetchUserFromDatabase(userEmail.email);
     if (!token || typeof token !== "string" || !userExists[0]._id) {

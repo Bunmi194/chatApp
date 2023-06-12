@@ -1,4 +1,4 @@
-const emailContentFunction = (appName, token) => {
+export const emailContentFunction = (appName, token) => {
   return `<!DOCTYPE html>
   <html>
   <head>
@@ -61,7 +61,3 @@ const emailContentFunction = (appName, token) => {
   </html>
   `
 }
-
-module.exports = {
-  emailContentFunction
-};

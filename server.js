@@ -21,7 +21,7 @@ const io = socketIO(server, {
 });
 
 app.use(session({
-  secret: 'Emove',
+  secret: 'chat',
   resave: false,
   saveUninitialized: false
 }));
