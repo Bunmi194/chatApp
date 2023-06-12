@@ -214,12 +214,14 @@ route.post("/search", async (req, res) => {
       }
       user = await fetchUserFromDatabase(id);
     }
-    console.log("user: ", user);
+    // console.log("user: ", user);
+    // console.log("verifyToken: ", verifyToken);
     if (!user[0]) {
       return res.status(404).json({
-        message: "No such user",
+        message: "User might not exist or you are trying an invalid search",
       });
     }
+
     return res.status(200).json({
       status: "success",
       user,
