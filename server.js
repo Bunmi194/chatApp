@@ -3,9 +3,9 @@ const http = require('http');
 const socketIO = require('socket.io');
 const cors = require('cors');
 const morgan = require('morgan');
-const usersRoute = require("./routes/users");
-const chatsRoute = require("./routes/chats");
-const googleRoute = require("./routes/google");
+const usersRoute = require("./src/user/user-route");
+const chatsRoute = require("./src/chat/chat-route");
+const googleRoute = require("./src/google/google-route");
 const connectDB = require("./config/database");
 const session = require("express-session");
 const passport = require("passport");
@@ -44,7 +44,6 @@ app.use("/v1/users", usersRoute);
 app.use("/v1/chats", chatsRoute);
 app.use("/v1/strategy", googleRoute);
 
-try {
   const addUser = (userId, socketId) => {
     !users.some((user)=> user.userId === userId) && users.push({userId, socketId});
     console.log("users joined: ", JSON.stringify(users))
@@ -55,6 +54,7 @@ try {
     console.log("users left: ", JSON.stringify(users))
   }
   
+try {
   io.on('connection', (socket) => {
     console.log('A user connected');
     io.emit("welcome", "welcome everyone to my chat APP");
@@ -77,24 +77,6 @@ try {
           io.to(recipientId.socketId).emit('privateMessage', data);
         }
       }
-      //if(!recipientId)--offline user
-  
-      // console.log('Object: ' + JSON.stringify(io.sockets));
-      // if (data.recipientId) {
-      //   console.log(io.sockets);
-      //   const userSocket = io.sockets.connected[data.recipientId];
-      //   if (userSocket) {
-      //     userSocket.emit('message', data);
-      //     console.log("message sent to " + data.recipientId)
-      //   } else {
-      //     console.log(`User ${data.recipientId} is not online`);
-      //     // Store the message in a database or file to be sent later
-      //   }
-      // } else {
-      //   //do nothing
-      //   // io.to(data.room).emit('message', data);
-      //   console.log("nothing")
-      // }
     });
   
     socket.on('disconnect', () => {
