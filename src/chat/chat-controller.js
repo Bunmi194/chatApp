@@ -1,5 +1,7 @@
 const { messageZod } = require("./chat-auth");
 const { StatusCodes } = require("http-status-codes");
+const { fetchMessagesFromDatabase, saveMessageToDatabase } = require("./chat-service");
+const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -50,7 +52,7 @@ const authenticateUser = (req, res, next) => {
   }
 };
 
-const saveMessageToDatabase = (req, res, next) => {
+const saveMessageToDatabaseController = (req, res, next) => {
   const { message } = req.body;
   try {
     const newMessage = saveMessageToDatabase(message);
@@ -94,6 +96,7 @@ const postChat = async (req, res) => {
 
 const getChats = async (req, res) => {
   const { messages } = req.body;
+  console.log("messages: ", messages)
   return res.status(StatusCodes.OK).json({
     status: "success",
     messages,
@@ -103,7 +106,7 @@ const getChats = async (req, res) => {
 module.exports = {
   validateMessageInput,
   authenticateUser,
-  saveMessageToDatabase,
+  saveMessageToDatabaseController,
   sendAllMessages,
   postChat,
   getChats

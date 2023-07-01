@@ -1,8 +1,4 @@
 const express = require("express");
-const { StatusCodes } = require("http-status-codes");
-const jwt = require("jsonwebtoken");
-require("dotenv").config();
-const JWT_SECRET = process.env.JWT_SECRET;
 const route = express.Router();
 const {
   validateInput,

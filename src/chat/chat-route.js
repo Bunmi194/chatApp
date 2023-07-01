@@ -6,9 +6,10 @@ const route = express.Router();
 const {
   validateMessageInput,
   authenticateUser,
-  saveMessageToDatabase,
+  saveMessageToDatabaseController,
   postChat,
-  getChats
+  getChats,
+  sendAllMessages
 } = require("./chat-controller");
 
 //create & read
@@ -16,11 +17,11 @@ route.post(
   "/",
   validateMessageInput,
   authenticateUser,
-  saveMessageToDatabase,
+  saveMessageToDatabaseController,
   postChat
 );
 
-route.get("/", authenticateUser, getChats);
+route.get("/", authenticateUser, sendAllMessages, getChats);
 
 const chatsRoute = route;
 module.exports = chatsRoute;
