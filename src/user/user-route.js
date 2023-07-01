@@ -19,6 +19,10 @@ const {
   updateUserRecord,
   validateInputEmailOrId,
   fetchUser,
+  register,
+  login,
+  verifyUser,
+  searchUser
 } = require("./user-controller");
 
 route.post(
@@ -29,14 +33,7 @@ route.post(
   generateEncryptedPassword,
   sendVerificationEmail,
   writeUserToDatabase,
-  (req, res) => {
-    const { token } = req.body;
-
-    return res.status(StatusCodes.CREATED).json({
-      message: "Registration Successful",
-      token,
-    });
-  }
+  register
 );
 
 route.post(
@@ -44,32 +41,7 @@ route.post(
   validateInputLogin,
   checkIfUserDoesNotExists,
   authenticateUserDetails,
-  async (req, res) => {
-    const { user, email } = req.body;
-    const userId = user[0]._id;
-    try {
-      const token = jwt.sign(
-        {
-          email,
-          userId,
-        },
-        JWT_SECRET,
-        { expiresIn: "24h" }
-      );
-      return res.status(StatusCodes.OK).json({
-        status: "success",
-        message: "Login successful",
-        token,
-        user,
-      });
-    } catch (error) {
-      console.log("Error: ", error);
-      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-        status: "failed",
-        message: "Please try again",
-      });
-    }
-  }
+  login
 );
 
 route.get(
@@ -77,21 +49,9 @@ route.get(
   validateInputToken,
   authenticateUserToken,
   updateUserRecord,
-  async (_req, res) => {
-    return res.status(StatusCodes.OK).json({
-      status: "success",
-      message: "User verified",
-    });
-  }
+  verifyUser
 );
 
-//modify to check for token
-route.post("/search", validateInputEmailOrId, fetchUser, async (req, res) => {
-  const { user } = req.body;
-  return res.status(StatusCodes.OK).json({
-    status: "success",
-    user,
-  });
-});
+route.post("/search", validateInputEmailOrId, fetchUser, searchUser);
 const usersRoute = route;
 module.exports = usersRoute;

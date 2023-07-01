@@ -7,6 +7,8 @@ const {
   validateMessageInput,
   authenticateUser,
   saveMessageToDatabase,
+  postChat,
+  getChats
 } = require("./chat-controller");
 
 //create & read
@@ -15,22 +17,10 @@ route.post(
   validateMessageInput,
   authenticateUser,
   saveMessageToDatabase,
-  async (req, res) => {
-    const { newMessage } = req.body;
-    res.status(StatusCodes.OK).json({
-      status: "success",
-      newMessage,
-    });
-  }
+  postChat
 );
 
-route.get("/", authenticateUser, async (req, res) => {
-  const { messages } = req.body;
-  return res.status(StatusCodes.OK).json({
-    status: "success",
-    messages,
-  });
-});
+route.get("/", authenticateUser, getChats);
 
 const chatsRoute = route;
 module.exports = chatsRoute;

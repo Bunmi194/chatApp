@@ -256,8 +256,13 @@ const fetchUser = async (req, res, next) => {
     try {
         const token = req.headers.authorization.split(" ")[1];
         let user;
+        const verifyToken = jwt.verify(token, JWT_SECRET);
+        if(!verifyToken || !verifyToken.userId){
+            return res.status(StatusCodes.UNAUTHORIZED).json({
+                message: "UNAUTHORIZED"
+            })
+        }
         if(email){
-          const verifyToken = jwt.verify(token, JWT_SECRET);
           user = await fetchUserFromDatabase(email, verifyToken.userId);
         }
         if(id){
@@ -276,6 +281,57 @@ const fetchUser = async (req, res, next) => {
     }
 };
 
+const register = (req, res) => {
+    const { token } = req.body;
+
+    return res.status(StatusCodes.CREATED).json({
+        message: "Registration Successful",
+        token,
+    });
+      
+};
+
+const login = async (req, res) => {
+    const { user, email } = req.body;
+    const userId = user[0]._id;
+    try {
+      const token = jwt.sign(
+        {
+          email,
+          userId,
+        },
+        JWT_SECRET,
+        { expiresIn: "24h" }
+      );
+      return res.status(StatusCodes.OK).json({
+        status: "success",
+        message: "Login successful",
+        token,
+        user,
+      });
+    } catch (error) {
+      console.log("Error: ", error);
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+        status: "failed",
+        message: "Please try again",
+      });
+    }
+  }
+
+const verifyUser = async (_req, res) => {
+    return res.status(StatusCodes.OK).json({
+      status: "success",
+      message: "User verified",
+    });
+  }
+
+const searchUser = async (req, res) => {
+    const { user } = req.body;
+    return res.status(StatusCodes.OK).json({
+      status: "success",
+      user,
+    });
+}
 
 module.exports = {
     validateInput,
@@ -291,5 +347,9 @@ module.exports = {
     authenticateUserDetails,
     authenticateUserToken,
     updateUserRecord,
-    fetchUser
+    fetchUser,
+    register,
+    login,
+    verifyUser,
+    searchUser
 }

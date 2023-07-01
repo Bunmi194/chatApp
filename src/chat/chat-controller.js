@@ -84,9 +84,27 @@ const sendAllMessages = async (req, res, next) => {
   }
 };
 
+const postChat = async (req, res) => {
+  const { newMessage } = req.body;
+  res.status(StatusCodes.OK).json({
+    status: "success",
+    newMessage,
+  });
+}
+
+const getChats = async (req, res) => {
+  const { messages } = req.body;
+  return res.status(StatusCodes.OK).json({
+    status: "success",
+    messages,
+  });
+}
+
 module.exports = {
   validateMessageInput,
   authenticateUser,
   saveMessageToDatabase,
   sendAllMessages,
+  postChat,
+  getChats
 };
