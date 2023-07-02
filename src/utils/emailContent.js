@@ -1,3 +1,5 @@
+
+const CLIENTURL = process.env.CLIENTURL;
 const emailContentFunction = (appName, token) => {
   return `<!DOCTYPE html>
     <html>
@@ -52,7 +54,7 @@ const emailContentFunction = (appName, token) => {
         <div class="content">
           <h2>Welcome to ${appName}!</h2>
           <p>Thank you for signing up. Please click the button below to verify your account and get started.</p>
-          <p><a href="http://localhost:3000/verify/?token=${token}" class="button">Verify Account</a></p>
+          <p><a href="`+CLIENTURL+`/verify/?token=${token}" class="button">Verify Account</a></p>
         </div>
         <p>If you have any questions, feel free to contact our support team.</p>
         <p>Best regards,<br>${appName} Team</p>

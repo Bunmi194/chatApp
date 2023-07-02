@@ -85,7 +85,7 @@ try {
       io.emit('userList', users);
     });
     });
-    server.listen(4000, "0.0.0.0", () => {
+    server.listen(4000, () => {
       console.log('Server listening on port 4000');
     });
 } catch (error) {
