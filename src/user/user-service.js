@@ -1,4 +1,4 @@
-const User = require("../models/users");
+const User = require("./user-model");
 
 const saveUserToDatabase = async (user) => {
   const newUser = new User(user);
@@ -14,9 +14,6 @@ const saveUserToDatabase = async (user) => {
 };
 
 const fetchUserFromDatabase = async (userEmailOrId, currentUserId) => {
-  console.log("userEmailOrId: ", userEmailOrId);
-  console.log("userEmailOrId.includes('@'): ", userEmailOrId.includes("@"));
-  
   if (userEmailOrId.includes("@")) {
     // fetch by email excluding the current user
     return User.find({ email: userEmailOrId, _id: { $ne: currentUserId } })

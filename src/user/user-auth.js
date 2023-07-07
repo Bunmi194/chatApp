@@ -35,8 +35,18 @@ const loginUserZod = z.object({
 			required_error: 'Password is required'
 		})
 });
+const verifyToken = z.object({
+	token: z.string({ required_error: 'Token is required' }),
+});
+
+const verifyEmailOrId = z.object({
+	email: z.string().email().optional(),
+    id: z.string().optional(),
+});
 
 module.exports = {
     registerUserZod,
-    loginUserZod
+    loginUserZod,
+    verifyToken,
+    verifyEmailOrId
 }

@@ -1,28 +1,27 @@
-const Message = require("../models/chats");
+const Message = require("./chat-model");
 const mongoose = require("mongoose");
 
 const saveMessageToDatabase = (message) => {
-    return Message.create(message)
-        .then((message)=>{
-            return message;
-        })
-        .catch((error) => {
-            console.log(error);
-            return null;
-        });
+  return Message.create(message)
+    .then((message) => {
+      return message;
+    })
+    .catch((error) => {
+      console.log(error);
+      return null;
+    });
 };
 
 const updateMessageInDatabase = (messageId, messageObject) => {
-    return Message.findByIdAndUpdate(messageId, messageObject)
-        .then((message)=>{
-            return message;
-        })
-        .catch((error) => {
-            console.log(error);
-            return null;
-        });
+  return Message.findByIdAndUpdate(messageId, messageObject)
+    .then((message) => {
+      return message;
+    })
+    .catch((error) => {
+      console.log(error);
+      return null;
+    });
 };
-
 
 const fetchMessagesFromDatabase = async (userId) => {
   try {
@@ -31,36 +30,36 @@ const fetchMessagesFromDatabase = async (userId) => {
         $match: {
           $or: [
             { senderId: new mongoose.Types.ObjectId(userId) },
-            { recipientId: new mongoose.Types.ObjectId(userId) }
-          ]
-        }
+            { recipientId: new mongoose.Types.ObjectId(userId) },
+          ],
+        },
       },
       {
         $lookup: {
           from: "users",
           localField: "senderId",
           foreignField: "_id",
-          as: "sender"
-        }
+          as: "sender",
+        },
       },
       {
         $lookup: {
           from: "users",
           localField: "recipientId",
           foreignField: "_id",
-          as: "recipient"
-        }
+          as: "recipient",
+        },
       },
       {
-        $unwind: "$sender"
+        $unwind: "$sender",
       },
       {
-        $unwind: "$recipient"
+        $unwind: "$recipient",
       },
       {
         $sort: {
-          createdAt: -1
-        }
+          createdAt: -1,
+        },
       },
       {
         $group: {
@@ -68,30 +67,30 @@ const fetchMessagesFromDatabase = async (userId) => {
             $cond: {
               if: { $eq: ["$senderId", new mongoose.Types.ObjectId(userId)] },
               then: "$recipientId",
-              else: "$senderId"
-            }
+              else: "$senderId",
+            },
           },
           user: {
             $first: {
               $cond: {
                 if: { $eq: ["$senderId", new mongoose.Types.ObjectId(userId)] },
                 then: "$recipient",
-                else: "$sender"
-              }
-            }
+                else: "$sender",
+              },
+            },
           },
           messages: {
-            $push: "$$ROOT"
-          }
-        }
+            $push: "$$ROOT",
+          },
+        },
       },
       {
         $sort: {
-          "_id": 1
-        }
-      }
+          _id: 1,
+        },
+      },
     ]);
-    console.log("length: ", messages.length)
+    console.log("length: ", messages.length);
     return messages;
   } catch (err) {
     console.error(err);
@@ -99,9 +98,8 @@ const fetchMessagesFromDatabase = async (userId) => {
   }
 };
 
-
 module.exports = {
-    saveMessageToDatabase,
-    fetchMessagesFromDatabase,
-    updateMessageInDatabase
-}
+  saveMessageToDatabase,
+  fetchMessagesFromDatabase,
+  updateMessageInDatabase,
+};
