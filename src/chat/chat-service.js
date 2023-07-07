@@ -90,7 +90,6 @@ const fetchMessagesFromDatabase = async (userId) => {
         },
       },
     ]);
-    console.log("length: ", messages.length);
     return messages;
   } catch (err) {
     console.error(err);

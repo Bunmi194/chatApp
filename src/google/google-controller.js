@@ -13,9 +13,7 @@ exports.createUserOrLogin = async (profile) => {
             return "Please provide a valid email address";
         }
         const userExists = await fetchUserFromDatabase(email);
-        console.log("userExistsOOP: ", userExists);
         if(!userExists.length) {
-            console.log("IN")
             //register user
             const newUser = {
                 firstName: profile.name.givenName,
@@ -25,7 +23,6 @@ exports.createUserOrLogin = async (profile) => {
                 isVerified: true
             }
             const user = await saveUserToDatabase(newUser);
-            console.log("user: ", user);
             const userId = user._id;
             const token = jwt.sign(
                 {
@@ -42,7 +39,6 @@ exports.createUserOrLogin = async (profile) => {
             };
         }
         //login user
-        console.log("OUT")
         const userId = userExists[0]._id;
         const token = jwt.sign(
             {
@@ -57,7 +53,7 @@ exports.createUserOrLogin = async (profile) => {
             userExists
         }
     } catch (error) {
-        console.log(`ErrorHERE: ${error}`);
+        console.log(`Error: ${error}`);
         return null;
     }
 }

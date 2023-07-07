@@ -8,7 +8,6 @@ const bcrypt = require("bcrypt");
 const SALT_ROUNDS = process.env.SALT_ROUNDS;
 const APP_NAME = process.env.APP_NAME;
 const JWT_SECRET = process.env.JWT_SECRET;
-console.log("ENV: ", JWT_SECRET, APP_NAME, SALT_ROUNDS)
 const { sendMail } = require("../utils/email");
 const { emailContentFunction } = require("../utils/emailContent");
 
@@ -31,7 +30,6 @@ const validateInput = (req, res, next) => {
 
 const validateInputLogin = (req, res, next) => {
     try {
-        console.log("VALIDATE")
         //validate input
         const error = loginUserZod.safeParse(req.body);
         if (error.success === false) {
@@ -116,7 +114,6 @@ const checkIfUserExists = async (req, res, next) => {
 
 const checkIfUserDoesNotExists = async (req, res, next) => {
     const { email } = req.body;
-    console.log("USEREXISTS")
     try {
         //check if user does not exists
         const userExists = await fetchUserFromDatabase(email);
@@ -192,7 +189,6 @@ const writeUserToDatabase = async (req, res, next) => {
 
 const authenticateUserDetails = async (req, res, next) => {
     const { user, password } = req.body;
-    console.log("AUTHENTICATE")
     try {
         const userId = user[0]._id;
         const authenticateUser = await bcrypt.compare(
@@ -299,7 +295,6 @@ const register = (req, res) => {
 
 const login = async (req, res) => {
     const { user, email } = req.body;
-    console.log("LOGIN")
     const userId = user[0]._id;
     try {
       const token = jwt.sign(

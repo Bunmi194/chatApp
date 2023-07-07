@@ -21,7 +21,6 @@ route.get(
   passport.authenticate("google", { failureRedirect: `${GOOGLE_REDIRECT}/` }),
   function (req, res) {
     // Successful authentication, redirect home.
-    console.log("req.user: ", req.user)
     const token = req.user.token;
     const email = req.user.userExists[0]? req.user.userExists[0].email : req.user.userExists.email;
     const firstName = req.user.userExists[0]? req.user.userExists[0].firstName : req.user.userExists.firstName;
