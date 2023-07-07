@@ -1,2 +1,5 @@
 /node_modules
 /real-time-chat-app-client/
+.env
+/app
+.gitignore
