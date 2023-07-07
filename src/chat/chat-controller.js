@@ -96,7 +96,6 @@ const postChat = async (req, res) => {
 
 const getChats = async (req, res) => {
   const { messages } = req.body;
-  console.log("messages: ", messages)
   return res.status(StatusCodes.OK).json({
     status: "success",
     messages,

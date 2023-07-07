@@ -46,17 +46,17 @@ app.use("/v1/strategy", googleRoute);
 
   const addUser = (userId, socketId) => {
     !users.some((user)=> user.userId === userId) && users.push({userId, socketId});
-    console.log("users joined: ", JSON.stringify(users))
+    // console.log("users joined: ", JSON.stringify(users))
   }
   
   const removeUser = (socketId) => {
     users = users.filter((user)=> user.socketId !== socketId);
-    console.log("users left: ", JSON.stringify(users))
+    // console.log("users left: ", JSON.stringify(users))
   }
   
 try {
   io.on('connection', (socket) => {
-    console.log('A user connected');
+    // console.log('A user connected');
     io.emit("welcome", "welcome everyone to my chat APP");
     socket.on('join', (userId) => {
       // console.log('User joined room: ' + userId);
@@ -65,13 +65,13 @@ try {
     });
   
     socket.on('message', (data) => {
-      console.log('data: ' + JSON.stringify(data));
-      console.log('users: ' + JSON.stringify(users));
+      // console.log('data: ' + JSON.stringify(data));
+      // console.log('users: ' + JSON.stringify(users));
       const receiverId = data.receiverId;
-      console.log('receiverId: ' + JSON.stringify(receiverId));
+      // console.log('receiverId: ' + JSON.stringify(receiverId));
       if(receiverId){
         const recipientId = users.find(user => user.userId === receiverId);
-        console.log('recipientId: ', recipientId);
+        // console.log('recipientId: ', recipientId);
         if(recipientId){
           //user is already connected--online
           io.to(recipientId.socketId).emit('privateMessage', data);
@@ -80,7 +80,7 @@ try {
     });
   
     socket.on('disconnect', () => {
-      console.log('A user disconnected');
+      // console.log('A user disconnected');
       removeUser(socket.id);
       io.emit('userList', users);
     });
