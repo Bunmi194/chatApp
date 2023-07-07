@@ -1,6 +1,6 @@
 # Chat-App Backend V1
 
-This branch contains the source code for Chat-App Backend. Chat-App is a real-time communication application built with JavaScript, MongoDB for data persistence and ExpressJS. You can interact with some of my other projects on my [Portfolio](https://bunmioladipupo-edf1263ld-bunmi194.vercel.app/).
+This branch contains the source code for Chat-App Backend. Chat-App is a real-time communication application built with JavaScript, MongoDB for data persistence and ExpressJS. You can interact with some of my other projects on my [Portfolio](https://bunmioladipupo.vercel.app/).
 
 ## Dependencies
 
@@ -29,7 +29,7 @@ You can find the link to the frontend repository at [Chat-App-Frontend](https://
 
 ## Closing
 
-Thank you for stopping by. Checkout the live project at [Chat-App](https://chat-app-front-end-mu.vercel.app/) and pay me a visit at [my portfolio](https://bunmioladipupo-edf1263ld-bunmi194.vercel.app/)
+Thank you for stopping by. Checkout the live project at [Chat-App](https://chat-app-front-end-mu.vercel.app/) and pay me a visit at [my portfolio](https://bunmioladipupo.vercel.app/)
 
 ```bash
 chat-app$ exit
